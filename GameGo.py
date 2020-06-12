@@ -7,7 +7,7 @@ class Turn:
         self.y = y
         self.player = player
     def __str__(self):
-        return f'x = {self.x}, y = {self.y}, pl = {self.player}'
+        return f'{self.x} {self.y} {self.player}'
 
 class GameGo:
     def __init__(self, height, width):
@@ -15,6 +15,16 @@ class GameGo:
         self.height = height
         self.width = width
         #создаем игровое поле
+        self.playing_field = np.zeros((height, width), np.uint8)
+        #объявляем переменные для хранения счета
+        self.score_first = 0
+        self.score_second = 0
+        #история
+        self.history = []
+
+    def update(self, height, width):
+        self.height = height
+        self.width = width
         self.playing_field = np.zeros((height, width), np.uint8)
         #объявляем переменные для хранения счета
         self.score_first = 0
@@ -116,13 +126,11 @@ class GameGo:
         # print("enemy: ", dead2)
         # print("self player", player)
         # print("self enemy", enemy)
-        # print(self.playing_field)
+
         
         #если игрок делает ход, который может убить его группу
         if check2:
-            print("111 строка !!!!")
             if (not self.check_KO(x, y) and check1):
-                print("!!!")
                 if player == 1:
                     self.score_first += len(dead1)
                 else:
@@ -134,7 +142,6 @@ class GameGo:
                 self.history.append(Turn(x, y, player))
             else:
                 self.playing_field[x][y] = 0
-                print('произошел суицид')
                 return False
             return True
         else:
@@ -187,11 +194,6 @@ class GameGo:
     def result(self):
         field1 = self.bfs(2)
         field2 = self.bfs(1)
-        print(f'размер поля первого игрока = {field1}')
-        print(f'размер поля второго игрока = {field2}')
-        print(f'Первый игрок съел = {self.score_first}')
-        print(f'Второй игрок съел = {self.score_second}')
-
         return (field1 + self.score_first, field2 + self.score_second)
 
         # print(used)
