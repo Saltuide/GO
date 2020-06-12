@@ -21,8 +21,8 @@ class Game:
     def __init__(self):
         self.width = 1200
         self.height = 800
-        self.black_points = 0
-        self.white_points = 0
+        # self.black_points = 0
+        # self.white_points = 0
         ######################################
         self.root = Tk()
         self.root.title("Go")
@@ -66,6 +66,9 @@ class Game:
         self.draw_base_field(14, 14)
 
     def skip_turn(self):
+        print(game_logic.result())
+        print(game_logic.score_first)
+        print(game_logic.score_second)
         print("skipped")
 
     def menubar(self):
@@ -127,7 +130,7 @@ class Game:
 
         self.win.blit(self.game_surf, (up_space, left_space))
 
-        label = self.myfont.render("Черные: 0    Белые: 0", 1, (0,0,0))
+        label = self.myfont.render(f'Черные: {game_logic.score_first}    Белые: {game_logic.score_second}', 1, (0,0,0))
         self.win.blit(label, (680, 30))
 
         for x in range(field_width + 1):
@@ -174,12 +177,13 @@ class Game:
                             pygame.draw.circle(self.win, (255, 0, 0), (tmp_x, tmp_y), 17)
                         elif game_logic.playing_field[i, j] == 2: #белый камень
                             pygame.draw.circle(self.win, (0, 0, 255), (tmp_x, tmp_y), 17)
+                self.whos_turn = not self.whos_turn
 
 
             # tmp_x = 20 + self.block_size * tmp_x #вычисляем координаты этого пересечения
             # tmp_y = 20 + self.block_size * tmp_y
 
-            self.whos_turn = not self.whos_turn
+            
             pygame.display.update()
 
     def run(self):
@@ -192,9 +196,9 @@ class Game:
         self.root.update()
 
 
-if __name__ == "__main__":         
+if __name__ == "__main__":   
+    game_logic = GameGo(15, 15)      
     game = Game()
-    game_logic = GameGo(15, 15)
     run = True
     while run:
         game.run()
